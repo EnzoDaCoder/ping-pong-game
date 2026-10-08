@@ -9,10 +9,19 @@
       color: white;
       font-family: Arial, sans-serif;
       text-align: center;
+      margin: 0;
+      padding: 0;
     }
 
     h1 {
       font-size: 50px;
+      margin-top: 40px;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #aaa;
+      font-size: 18px;
     }
 
     .games {
@@ -21,6 +30,7 @@
       flex-wrap: wrap;
       gap: 25px;
       margin-top: 50px;
+      padding: 0 20px;
     }
 
     .game {
@@ -29,14 +39,21 @@
       border-radius: 15px;
       width: 220px;
       padding: 25px;
+      transition: 0.2s;
     }
 
     .game:hover {
       border-color: white;
+      transform: translateY(-5px);
     }
 
     .game h2 {
       margin-top: 0;
+    }
+
+    .game p {
+      color: #bbb;
+      min-height: 40px;
     }
 
     a {
@@ -47,10 +64,20 @@
       padding: 10px 25px;
       border-radius: 8px;
       font-weight: bold;
+      transition: 0.2s;
     }
 
     a:hover {
       background-color: #ccc;
+      transform: scale(1.05);
+    }
+
+    footer {
+      margin-top: 60px;
+      padding: 25px;
+      color: #777;
+      font-size: 14px;
+      border-top: 1px solid #222;
     }
   </style>
 </head>
@@ -59,7 +86,8 @@
 
   <h1>🎮 Enzo's Game Hub</h1>
 
-  <p>Pick a game</p>
+  <p class="subtitle">Pick a game</p>
+
 
   <div class="games">
 
@@ -69,11 +97,13 @@
       <a href="pong/">Play</a>
     </div>
 
+
     <div class="game">
       <h2>🐍 Snake</h2>
       <p>Classic snake game</p>
       <a href="snake/">Play</a>
     </div>
+
 
     <div class="game">
       <h2>❌ Tic Tac Toe</h2>
@@ -81,17 +111,26 @@
       <a href="tic-tac-toe/">Play</a>
     </div>
 
+
     <div class="game">
       <h2>☄️ Meteor Mayhem</h2>
       <p>Dodge meteors and survive!</p>
       <a href="meteor-mayhem/">Play</a>
     </div>
+
+
     <div class="game">
-  <h2>🧟 Zombie Survival</h2>
-  <p>Fight zombies, survive waves, and upgrade.</p>
-  <a href="zombie-survival/">Play</a>
-</div>
+      <h2>🧟 Zombie Survival</h2>
+      <p>Fight zombies, survive waves, and upgrade.</p>
+      <a href="zombie-survival/">Play</a>
+    </div>
+
   </div>
+
+
+  <footer>
+    Enzo's Game Hub • Version 1.0
+  </footer>
 
 </body>
 </html>
