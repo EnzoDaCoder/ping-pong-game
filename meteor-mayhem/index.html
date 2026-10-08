@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meteor Mayhem</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, #18204a, #050510 60%);
+      color: white;
+      font-family: Arial, sans-serif;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .game-container {
+      width: min(95%, 900px);
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      margin: 5px;
+      font-size: 44px;
+      letter-spacing: 3px;
+    }
+
+    .subtitle {
+      color: #aaa;
+      margin-top: 5px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 20px 0 12px;
+    }
+
+    .stat {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 10px;
+    }
+
+    .stat-title {
+      color: #aaa;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    .stat-value {
+      font-size: 25px;
+      font-weight: bold;
+      margin-top: 3px;
+    }
+
+    .game-wrapper {
+      position: relative;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      background: #03040b;
+      border: 2px solid #5566ff;
+      border-radius: 15px;
+
+      box-shadow:
+        0 0 20px rgba(80, 100, 255, 0.35);
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      border-radius: 15px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      background: rgba(3, 4, 12, 0.82);
+      backdrop-filter: blur(5px);
+    }
+
+    .overlay.hidden {
+      display: none;
+    }
+
+    .overlay h2 {
+      font-size: 42px;
+      margin: 0 0 10px;
+    }
+
+    .overlay p {
+      color: #bbb;
+      max-width: 500px;
+      padding: 0 20px;
+      line-height: 1.5;
+    }
+
+    button {
+      background: #6474ff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 25px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .controls {
+      color: #999;
+      font-size: 14px;
+      margin-top: 15px;
+      line-height: 1.7;
+    }
+
+    .dash-bar {
+      height: 12px;
+      background: #171822;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    #dashFill {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #4d7cff, #9b6dff);
+      transition: width 0.1s;
+    }
+
+    @media(max-width: 600px) {
+      h1 {
+        font-size: 32px;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="game-container">
+
+  <h1>☄️ METEOR MAYHEM</h1>
+
+  <p class="subtitle">
+    Dodge everything. Collect stars. Survive as long as possible.
+  </p>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="stat-title">SCORE</div>
+      <div class="stat-value" id="score">0</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">BEST</div>
+      <div class="stat-value" id="best">0</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">LIVES</div>
+      <div class="stat-value" id="lives">❤️❤️❤️</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">LEVEL</div>
+      <div class="stat-value" id="level">1</div>
+    </div>
+
+  </div>
+
+  <div class="game-wrapper">
+
+    <canvas
+      id="game"
+      width="800"
+      height="500">
+    </canvas>
+
+    <div class="overlay" id="overlay">
+
+      <h2 id="overlayTitle">
+        METEOR MAYHEM
+      </h2>
+
+      <p id="overlayText">
+        Move with WASD or the arrow keys.
+        Collect stars and avoid the meteors.
+        Press SPACE to dash.
+      </p>
+
+      <button id="startButton">
+        START GAME
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="dash-bar">
+    <div id="dashFill"></div>
+  </div>
+
+  <div class="controls">
+    WASD / Arrow Keys = Move
+    <br>
+    SPACE = Dash
+    &nbsp; • &nbsp;
+    P = Pause
+    &nbsp; • &nbsp;
+    R = Restart
+  </div>
+
+</div>
+
+<script>
+
+const canvas =
+  document.getElementById("game");
+
+const ctx =
+  canvas.getContext("2d");
+
+const scoreText =
+  document.getElementById("score");
+
+const bestText =
+  document.getElementById("best");
+
+const livesText =
+  document.getElementById("lives");
+
+const levelText =
+  document.getElementById("level");
+
+const dashFill =
+  document.getElementById("dashFill");
+
+const overlay =
+  document.getElementById("overlay");
+
+const overlayTitle =
+  document.getElementById("overlayTitle");
+
+const overlayText =
+  document.getElementById("overlayText");
+
+const startButton =
+  document.getElementById("startButton");
+
+
+let keys = {};
+
+let player;
+
+let meteors = [];
+
+let stars = [];
+
+let particles = [];
+
+let powerups = [];
+
+let backgroundStars = [];
+
+let score = 0;
+
+let bestScore =
+  Number(localStorage.getItem("meteorBest")) || 0;
+
+let lives = 3;
+
+let level = 1;
+
+let gameRunning = false;
+
+let paused = false;
+
+let lastTime = 0;
+
+let meteorTimer = 0;
+
+let starTimer = 0;
+
+let powerTimer = 0;
+
+let survivalTimer = 0;
+
+let screenShake = 0;
+
+bestText.textContent = bestScore;
+
+
+for (let i = 0; i < 90; i++) {
+
+  backgroundStars.push({
+
+    x: Math.random() * canvas.width,
+
+    y: Math.random() * canvas.height,
+
+    size:
+      Math.random() * 2 + 0.5,
+
+    speed:
+      Math.random() * 1.2 + 0.2
+
+  });
+
+}
+
+
+function resetGame() {
+
+  player = {
+
+    x: canvas.width / 2,
+
+    y: canvas.height - 70,
+
+    radius: 16,
+
+    speed: 300,
+
+    shield: 0,
+
+    invincible: 0,
+
+    dashCooldown: 0,
+
+    dashTime: 0
+
+  };
+
+  meteors = [];
+
+  stars = [];
+
+  particles = [];
+
+  powerups = [];
+
+  score = 0;
+
+  lives = 3;
+
+  level = 1;
+
+  meteorTimer = 0;
+
+  starTimer = 0;
+
+  powerTimer = 0;
+
+  survivalTimer = 0;
+
+  screenShake = 0;
+
+  updateUI();
+
+}
+
+
+function startGame() {
+
+  resetGame();
+
+  gameRunning = true;
+
+  paused = false;
+
+  overlay.classList.add("hidden");
+
+}
+
+
+function updateUI() {
+
+  scoreText.textContent =
+    Math.floor(score);
+
+  bestText.textContent =
+    bestScore;
+
+  levelText.textContent =
+    level;
+
+  livesText.textContent =
+    "❤️".repeat(lives);
+
+}
+
+
+function spawnMeteor() {
+
+  const radius =
+    Math.random() * 18 + 14;
+
+  meteors.push({
+
+    x:
+      Math.random() *
+      (canvas.width - radius * 2)
+      + radius,
+
+    y: -radius,
+
+    radius: radius,
+
+    speed:
+      Math.random() * 80 +
+      130 +
+      level * 14,
+
+    vx:
+      (Math.random() - 0.5) * 70,
+
+    rotation: 0,
+
+    spin:
+      (Math.random() - 0.5) * 4
+
+  });
+
+}
+
+
+function spawnStar() {
+
+  stars.push({
+
+    x:
+      Math.random() *
+      (canvas.width - 40)
+      + 20,
+
+    y: -20,
+
+    radius: 11,
+
+    speed:
+      110 + level * 5,
+
+    pulse: 0
+
+  });
+
+}
+
+
+function spawnPowerup() {
+
+  powerups.push({
+
+    x:
+      Math.random() *
+      (canvas.width - 50)
+      + 25,
+
+    y: -30,
+
+    radius: 14,
+
+    speed: 90,
+
+    rotation: 0
+
+  });
+
+}
+
+
+function circleCollision(a, b) {
+
+  const dx =
+    a.x - b.x;
+
+  const dy =
+    a.y - b.y;
+
+  const distance =
+    Math.sqrt(
+      dx * dx +
+      dy * dy
+    );
+
+  return distance <
+    a.radius +
+    b.radius;
+
+}
+
+
+function createExplosion(
+  x,
+  y,
+  amount
+) {
+
+  for (let i = 0; i < amount; i++) {
+
+    particles.push({
+
+      x: x,
+
+      y: y,
+
+      vx:
+        (Math.random() - 0.5) * 300,
+
+      vy:
+        (Math.random() - 0.5) * 300,
+
+      size:
+        Math.random() * 5 + 2,
+
+      life: 1
+
+    });
+
+  }
+
+}
+
+
+function damagePlayer() {
+
+  if (
+    player.invincible > 0 ||
+    player.dashTime > 0
+  ) {
+    return;
+  }
+
+  if (player.shield > 0) {
+
+    player.shield = 0;
+
+    createExplosion(
+      player.x,
+      player.y,
+      25
+    );
+
+    screenShake = 12;
+
+    return;
+
+  }
+
+  lives--;
+
+  player.invincible = 1.5;
+
+  screenShake = 18;
+
+  createExplosion(
+    player.x,
+    player.y,
+    30
+  );
+
+  updateUI();
+
+  if (lives <= 0) {
+
+    endGame();
+
+  }
+
+}
+
+
+function endGame() {
+
+  gameRunning = false;
+
+  if (score > bestScore) {
+
+    bestScore =
+      Math.floor(score);
+
+    localStorage.setItem(
+      "meteorBest",
+      bestScore
+    );
+
+  }
+
+  updateUI();
+
+  overlayTitle.textContent =
+    "GAME OVER";
+
+  overlayText.textContent =
+    "Score: " +
+    Math.floor(score) +
+    " • Level: " +
+    level;
+
+  startButton.textContent =
+    "PLAY AGAIN";
+
+  overlay.classList.remove(
+    "hidden"
+  );
+
+}
+
+
+function dash() {
+
+  if (
+    !gameRunning ||
+    paused ||
+    player.dashCooldown > 0
+  ) {
+    return;
+  }
+
+  player.dashTime = 0.22;
+
+  player.dashCooldown = 2;
+
+  createExplosion(
+    player.x,
+    player.y,
+    12
+  );
+
+}
+
+
+function update(delta) {
+
+  if (
+    !gameRunning ||
+    paused
+  ) {
+    return;
+  }
+
+
+  survivalTimer += delta;
+
+  score += delta * 4;
+
+
+  level =
+    Math.floor(score / 100) + 1;
+
+
+  let dx = 0;
+
+  let dy = 0;
+
+
+  if (
+    keys["ArrowLeft"] ||
+    keys["a"]
+  ) {
+    dx -= 1;
+  }
+
+  if (
+    keys["ArrowRight"] ||
+    keys["d"]
+  ) {
+    dx += 1;
+  }
+
+  if (
+    keys["ArrowUp"] ||
+    keys["w"]
+  ) {
+    dy -= 1;
+  }
+
+  if (
+    keys["ArrowDown"] ||
+    keys["s"]
+  ) {
+    dy += 1;
+  }
+
+
+  if (
+    dx !== 0 ||
+    dy !== 0
+  ) {
+
+    const length =
+      Math.sqrt(
+        dx * dx +
+        dy * dy
+      );
+
+    dx /= length;
+
+    dy /= length;
+
+  }
+
+
+  let moveSpeed =
+    player.speed;
+
+
+  if (player.dashTime > 0) {
+
+    moveSpeed *= 3.4;
+
+    player.dashTime -= delta;
+
+  }
+
+
+  player.x +=
+    dx *
+    moveSpeed *
+    delta;
+
+  player.y +=
+    dy *
+    moveSpeed *
+    delta;
+
+
+  player.x =
+    Math.max(
+      player.radius,
+      Math.min(
+        canvas.width -
+        player.radius,
+        player.x
+      )
+    );
+
+  player.y =
+    Math.max(
+      player.radius,
+      Math.min(
+        canvas.height -
+        player.radius,
+        player.y
+      )
+    );
+
+
+  if (player.invincible > 0) {
+
+    player.invincible -= delta;
+
+  }
+
+
+  if (player.shield > 0) {
+
+    player.shield -= delta;
+
+  }
+
+
+  if (player.dashCooldown > 0) {
+
+    player.dashCooldown -= delta;
+
+  }
+
+
+  const dashPercent =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        (1 -
+        player.dashCooldown / 2)
+        * 100
+      )
+    );
+
+  dashFill.style.width =
+    dashPercent + "%";
+
+
+  meteorTimer += delta;
+
+  starTimer += delta;
+
+  powerTimer += delta;
+
+
+  const meteorDelay =
+    Math.max(
+      0.22,
+      0.8 -
+      level * 0.04
+    );
+
+
+  if (meteorTimer >= meteorDelay) {
+
+    meteorTimer = 0;
+
+    spawnMeteor();
+
+  }
+
+
+  if (starTimer >= 1.8) {
+
+    starTimer = 0;
+
+    spawnStar();
+
+  }
+
+
+  if (powerTimer >= 11) {
+
+    powerTimer = 0;
+
+    spawnPowerup();
+
+  }
+
+
+  for (
+    let i =
+      meteors.length - 1;
+    i >= 0;
+    i--
+  ) {
+
+    const meteor =
+      meteors[i];
+
+    meteor.y +=
+      meteor.speed * delta;
+
+    meteor.x +=
+      meteor.vx * delta;
+
+    meteor.rotation +=
+      meteor.spin * delta;
+
+
+    if (
+      meteor.x <
+      meteor.radius ||
+      meteor.x >
+      canvas.width -
+      meteor.radius
+    ) {
+
+      meteor.vx *= -1;
+
+    }
+
+
+    if (
+      circleCollision(
+        player,
+        meteor
+      )
+    ) {
+
+      damagePlayer();
+
+      meteors.splice(
+        i,
+        1
+      );
+
+      continue;
+
+    }
+
+
+    if (
+      meteor.y >
+      canvas.height +
+      meteor.radius
+    ) {
+
+      meteors.splice(
+        i,
+        1
+      );
+
+    }
+
+  }
+
+
+  for (
+    let i =
+      stars.length - 1;
+    i >= 0;
+    i--
+  ) {
+
+    const star =
+      stars[i];
+
+    star.y +=
+      star.speed * delta;
+
+    star.pulse +=
+      delta * 5;
+
+
+    if (
+      circleCollision(
+        player,
+        star
+      )
+    ) {
+
+      score += 25;
+
+      createExplosion(
+        star.x,
+        star.y,
+        14
+      );
+
+      stars.splice(
+        i,
+        1
+      );
+
+      continue;
+
+    }
+
+
+    if (
+      star.y >
+      canvas.height + 30
+    ) {
+
+      stars.splice(
+        i,
+        1
+      );
+
+    }
+
+  }
+
+
+  for (
+    let i =
+      powerups.length - 1;
+    i >= 0;
+    i--
+  ) {
+
+    const power =
+      powerups[i];
+
+    power.y +=
+      power.speed * delta;
+
+    power.rotation +=
+      delta * 3;
+
+
+    if (
+      circleCollision(
+        player,
+        power
+      )
+    ) {
+
+      player.shield = 7;
+
+      score += 40;
+
+      createExplosion(
+        power.x,
+        power.y,
+        22
+      );
+
+      powerups.splice(
+        i,
+        1
+      );
+
+      continue;
+
+    }
+
+
+    if (
+      power.y >
+      canvas.height + 40
+    ) {
+
+      powerups.splice(
+        i,
+        1
+      );
+
+    }
+
+  }
+
+
+  for (
+    let i =
+      particles.length - 1;
+    i >= 0;
+    i--
+  ) {
+
+    const particle =
+      particles[i];
+
+    particle.x +=
+      particle.vx * delta;
+
+    particle.y +=
+      particle.vy * delta;
+
+    particle.vx *= 0.97;
+
+    particle.vy *= 0.97;
+
+    particle.life -=
+      delta * 1.8;
+
+
+    if (
+      particle.life <= 0
+    ) {
+
+      particles.splice(
+        i,
+        1
+      );
+
+    }
+
+  }
+
+
+  for (
+    const star
+    of backgroundStars
+  ) {
+
+    star.y +=
+      star.speed *
+      60 *
+      delta;
+
+    if (
+      star.y >
+      canvas.height
+    ) {
+
+      star.y = 0;
+
+      star.x =
+        Math.random() *
+        canvas.width;
+
+    }
+
+  }
+
+
+  if (screenShake > 0) {
+
+    screenShake -=
+      delta * 35;
+
+  }
+
+
+  if (
+    score > bestScore
+  ) {
+
+    bestScore =
+      Math.floor(score);
+
+  }
+
+
+  updateUI();
+
+}
+
+
+function drawBackground() {
+
+  ctx.fillStyle =
+    "#03040b";
+
+  ctx.fillRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+
+  for (
+    const star
+    of backgroundStars
+  ) {
+
+    ctx.fillStyle =
+      "rgba(255,255,255,0.7)";
+
+    ctx.fillRect(
+      star.x,
+      star.y,
+      star.size,
+      star.size
+    );
+
+  }
+
+}
+
+
+function drawPlayer() {
+
+  ctx.save();
+
+  ctx.translate(
+    player.x,
+    player.y
+  );
+
+
+  if (
+    player.invincible > 0 &&
+    Math.floor(
+      player.invincible * 10
+    ) % 2 === 0
+  ) {
+
+    ctx.globalAlpha = 0.3;
+
+  }
+
+
+  if (
+    player.shield > 0
+  ) {
+
+    ctx.strokeStyle =
+      "#53d8ff";
+
+    ctx.lineWidth = 4;
+
+    ctx.shadowBlur = 20;
+
+    ctx.shadowColor =
+      "#53d8ff";
+
+    ctx.beginPath();
+
+    ctx.arc(
+      0,
+      0,
+      27,
+      0,
+      Math.PI * 2
+    );
+
+    ctx.stroke();
+
+  }
+
+
+  ctx.shadowBlur = 18;
+
+  ctx.shadowColor =
+    "#6c7cff";
+
+  ctx.fillStyle =
+    "#8c98ff";
+
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    0,
+    -20
+  );
+
+  ctx.lineTo(
+    -15,
+    16
+  );
+
+  ctx.lineTo(
+    0,
+    10
+  );
+
+  ctx.lineTo(
+    15,
+    16
+  );
+
+  ctx.closePath();
+
+  ctx.fill();
+
+
+  ctx.fillStyle =
+    "#ffffff";
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    0,
+    -10
+  );
+
+  ctx.lineTo(
+    -5,
+    6
+  );
+
+  ctx.lineTo(
+    5,
+    6
+  );
+
+  ctx.closePath();
+
+  ctx.fill();
+
+
+  if (
+    player.dashTime > 0
+  ) {
+
+    ctx.fillStyle =
+      "#8f63ff";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      -8,
+      13
+    );
+
+    ctx.lineTo(
+      0,
+      35
+    );
+
+    ctx.lineTo(
+      8,
+      13
+    );
+
+    ctx.fill();
+
+  }
+
+
+  ctx.restore();
+
+}
+
+
+function drawMeteor(
+  meteor
+) {
+
+  ctx.save();
+
+  ctx.translate(
+    meteor.x,
+    meteor.y
+  );
+
+  ctx.rotate(
+    meteor.rotation
+  );
+
+  ctx.shadowBlur = 15;
+
+  ctx.shadowColor =
+    "#ff5e32";
+
+  ctx.fillStyle =
+    "#9e4730";
+
+
+  ctx.beginPath();
+
+  ctx.arc(
+    0,
+    0,
+    meteor.radius,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fill();
+
+
+  ctx.fillStyle =
+    "#5c291f";
+
+
+  ctx.beginPath();
+
+  ctx.arc(
+    -meteor.radius * 0.3,
+    -meteor.radius * 0.2,
+    meteor.radius * 0.25,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fill();
+
+
+  ctx.beginPath();
+
+  ctx.arc(
+    meteor.radius * 0.35,
+    meteor.radius * 0.25,
+    meteor.radius * 0.18,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fill();
+
+
+  ctx.restore();
+
+}
+
+
+function drawStar(
+  star
+) {
+
+  ctx.save();
+
+  ctx.translate(
+    star.x,
+    star.y
+  );
+
+
+  const scale =
+    1 +
+    Math.sin(
+      star.pulse
+    ) * 0.15;
+
+
+  ctx.scale(
+    scale,
+    scale
+  );
+
+
+  ctx.shadowBlur = 20;
+
+  ctx.shadowColor =
+    "#ffd84a";
+
+  ctx.fillStyle =
+    "#ffd84a";
+
+
+  ctx.beginPath();
+
+
+  for (
+    let i = 0;
+    i < 10;
+    i++
+  ) {
+
+    const radius =
+      i % 2 === 0
+        ? 13
+        : 6;
+
+    const angle =
+      -Math.PI / 2 +
+      i * Math.PI / 5;
+
+    const x =
+      Math.cos(angle) *
+      radius;
+
+    const y =
+      Math.sin(angle) *
+      radius;
+
+
+    if (i === 0) {
+
+      ctx.moveTo(
+        x,
+        y
+      );
+
+    } else {
+
+      ctx.lineTo(
+        x,
+        y
+      );
+
+    }
+
+  }
+
+
+  ctx.closePath();
+
+  ctx.fill();
+
+  ctx.restore();
+
+}
+
+
+function drawPowerup(
+  power
+) {
+
+  ctx.save();
+
+  ctx.translate(
+    power.x,
+    power.y
+  );
+
+  ctx.rotate(
+    power.rotation
+  );
+
+
+  ctx.shadowBlur = 20;
+
+  ctx.shadowColor =
+    "#52eaff";
+
+  ctx.strokeStyle =
+    "#52eaff";
+
+  ctx.lineWidth = 4;
+
+
+  ctx.beginPath();
+
+  ctx.arc(
+    0,
+    0,
+    power.radius,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.stroke();
+
+
+  ctx.fillStyle =
+    "#52eaff";
+
+  ctx.font =
+    "bold 18px Arial";
+
+  ctx.textAlign =
+    "center";
+
+  ctx.textBaseline =
+    "middle";
+
+  ctx.fillText(
+    "S",
+    0,
+    1
+  );
+
+
+  ctx.restore();
+
+}
+
+
+function drawParticles() {
+
+  for (
+    const particle
+    of particles
+  ) {
+
+    ctx.globalAlpha =
+      particle.life;
+
+    ctx.fillStyle =
+      "#aeb6ff";
+
+    ctx.fillRect(
+      particle.x,
+      particle.y,
+      particle.size,
+      particle.size
+    );
+
+  }
+
+  ctx.globalAlpha = 1;
+
+}
+
+
+function draw() {
+
+  drawBackground();
+
+
+  ctx.save();
+
+
+  if (
+    screenShake > 0
+  ) {
+
+    ctx.translate(
+      (Math.random() - 0.5)
+      * screenShake,
+
+      (Math.random() - 0.5)
+      * screenShake
+    );
+
+  }
+
+
+  for (
+    const star
+    of stars
+  ) {
+
+    drawStar(star);
+
+  }
+
+
+  for (
+    const power
+    of powerups
+  ) {
+
+    drawPowerup(power);
+
+  }
+
+
+  for (
+    const meteor
+    of meteors
+  ) {
+
+    drawMeteor(meteor);
+
+  }
+
+
+  drawPlayer();
+
+  drawParticles();
+
+
+  ctx.restore();
+
+
+  if (paused) {
+
+    ctx.fillStyle =
+      "rgba(0,0,0,0.55)";
+
+    ctx.fillRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+
+    ctx.fillStyle =
+      "white";
+
+    ctx.font =
+      "bold 50px Arial";
+
+    ctx.textAlign =
+      "center";
+
+    ctx.fillText(
+      "PAUSED",
+      canvas.width / 2,
+      canvas.height / 2
+    );
+
+  }
+
+}
+
+
+function gameLoop(time) {
+
+  let delta =
+    (time - lastTime) /
+    1000;
+
+  lastTime = time;
+
+
+  if (delta > 0.05) {
+
+    delta = 0.05;
+
+  }
+
+
+  update(delta);
+
+  draw();
+
+
+  requestAnimationFrame(
+    gameLoop
+  );
+
+}
+
+
+document.addEventListener(
+  "keydown",
+  function(event) {
+
+    keys[event.key] = true;
+
+    keys[event.key.toLowerCase()] =
+      true;
+
+
+    if (
+      event.code === "Space"
+    ) {
+
+      event.preventDefault();
+
+      dash();
+
+    }
+
+
+    if (
+      event.key.toLowerCase()
+      === "p"
+    ) {
+
+      paused = !paused;
+
+    }
+
+
+    if (
+      event.key.toLowerCase()
+      === "r"
+    ) {
+
+      startGame();
+
+    }
+
+  }
+);
+
+
+document.addEventListener(
+  "keyup",
+  function(event) {
+
+    keys[event.key] = false;
+
+    keys[event.key.toLowerCase()] =
+      false;
+
+  }
+);
+
+
+startButton.addEventListener(
+  "click",
+  startGame
+);
+
+
+resetGame();
+
+requestAnimationFrame(
+  gameLoop
+);
+
+</script>
+
+</body>
+</html>
