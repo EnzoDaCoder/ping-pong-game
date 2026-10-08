@@ -1,135 +1,1452 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Enzo's Game Hub</title>
 
-  <link rel="icon" type="image/png" href="favicon.png">
+  <link
+    rel="icon"
+    type="image/png"
+    href="favicon.png"
+  >
 
   <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      background-color: #111;
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
       margin: 0;
-      padding: 0;
+      background:
+        radial-gradient(
+          circle at top,
+          #10243a,
+          #07090f 55%
+        );
+
+      color: white;
+
+      font-family:
+        Arial,
+        sans-serif;
+
+      min-height: 100vh;
     }
 
-    h1 {
-      font-size: 50px;
-      margin-top: 40px;
-      margin-bottom: 10px;
-    }
 
-    .subtitle {
-      color: #aaa;
-      font-size: 18px;
-    }
-
-    .games {
+    header {
       display: flex;
-      justify-content: center;
+
+      justify-content:
+        space-between;
+
+      align-items: center;
+
       flex-wrap: wrap;
-      gap: 25px;
-      margin-top: 50px;
-      padding: 0 20px;
+
+      gap: 20px;
+
+      padding:
+        20px 5%;
+
+      border-bottom:
+        1px solid #222;
+
+      background:
+        rgba(
+          0,
+          0,
+          0,
+          0.35
+        );
     }
 
-    .game {
-      background-color: #222;
-      border: 2px solid #444;
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+
+    .logo-area img {
+      width: 65px;
+      height: 65px;
+
       border-radius: 15px;
-      width: 220px;
-      padding: 25px;
+
+      object-fit: cover;
+
+      box-shadow:
+        0 0 20px
+        rgba(
+          0,
+          200,
+          255,
+          0.35
+        );
+    }
+
+
+    .logo-text h1 {
+      margin: 0;
+
+      font-size: 30px;
+    }
+
+
+    .logo-text p {
+      margin:
+        4px 0 0;
+
+      color: #888;
+    }
+
+
+    nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+
+    nav button {
+      background: #171b22;
+
+      color: white;
+
+      border:
+        1px solid #333;
+
+      border-radius: 8px;
+
+      padding:
+        10px 14px;
+
+      cursor: pointer;
+    }
+
+
+    nav button:hover {
+      border-color:
+        #00ccff;
+    }
+
+
+    main {
+      width:
+        min(
+          1200px,
+          94%
+        );
+
+      margin: auto;
+    }
+
+
+    .featured {
+      margin-top: 35px;
+
+      padding: 35px;
+
+      border-radius: 20px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #16202e,
+          #172b1d
+        );
+
+      border:
+        1px solid #304554;
+
+      display: flex;
+
+      justify-content:
+        space-between;
+
+      align-items: center;
+
+      flex-wrap: wrap;
+
+      gap: 30px;
+
+      box-shadow:
+        0 0 30px
+        rgba(
+          0,
+          200,
+          255,
+          0.1
+        );
+    }
+
+
+    .featured-text {
+      max-width: 620px;
+    }
+
+
+    .featured-tag {
+      color: #59d7ff;
+
+      font-size: 13px;
+
+      font-weight: bold;
+
+      letter-spacing: 2px;
+    }
+
+
+    .featured h2 {
+      font-size: 42px;
+
+      margin:
+        10px 0;
+    }
+
+
+    .featured p {
+      color: #bbb;
+
+      font-size: 17px;
+
+      line-height: 1.5;
+    }
+
+
+    .featured a {
+      display: inline-block;
+
+      margin-top: 12px;
+
+      padding:
+        13px 25px;
+
+      background:
+        #00c8ff;
+
+      color: #001118;
+
+      font-weight: bold;
+
+      text-decoration: none;
+
+      border-radius: 10px;
+
       transition: 0.2s;
     }
 
-    .game:hover {
-      border-color: white;
-      transform: translateY(-5px);
+
+    .featured a:hover {
+      transform:
+        translateY(-3px);
+
+      box-shadow:
+        0 0 20px
+        rgba(
+          0,
+          200,
+          255,
+          0.5
+        );
     }
+
+
+    .featured-icon {
+      font-size: 110px;
+    }
+
+
+    .toolbar {
+      margin-top: 35px;
+
+      display: flex;
+
+      justify-content:
+        space-between;
+
+      gap: 15px;
+
+      flex-wrap: wrap;
+    }
+
+
+    #searchInput {
+      flex: 1;
+
+      min-width: 220px;
+
+      padding: 13px 16px;
+
+      background: #151820;
+
+      color: white;
+
+      border:
+        1px solid #333;
+
+      border-radius: 10px;
+
+      font-size: 16px;
+
+      outline: none;
+    }
+
+
+    #searchInput:focus {
+      border-color:
+        #00c8ff;
+    }
+
+
+    #randomButton {
+      padding:
+        12px 20px;
+
+      border: none;
+
+      border-radius: 10px;
+
+      background: #6b55ff;
+
+      color: white;
+
+      font-weight: bold;
+
+      cursor: pointer;
+    }
+
+
+    #randomButton:hover {
+      transform:
+        translateY(-2px);
+    }
+
+
+    .categories {
+      display: flex;
+
+      gap: 10px;
+
+      flex-wrap: wrap;
+
+      margin-top: 20px;
+    }
+
+
+    .category {
+      padding:
+        9px 15px;
+
+      background: #171a21;
+
+      border:
+        1px solid #333;
+
+      border-radius: 20px;
+
+      color: white;
+
+      cursor: pointer;
+    }
+
+
+    .category.active {
+      background: white;
+      color: black;
+    }
+
+
+    .section-title {
+      margin:
+        40px 0 20px;
+
+      font-size: 28px;
+
+      text-align: left;
+    }
+
+
+    .games {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(
+            230px,
+            1fr
+          )
+        );
+
+      gap: 22px;
+    }
+
+
+    .game {
+      position: relative;
+
+      background:
+        linear-gradient(
+          145deg,
+          #1b1e26,
+          #111318
+        );
+
+      border:
+        1px solid #333;
+
+      border-radius: 16px;
+
+      padding: 24px;
+
+      text-align: left;
+
+      transition: 0.2s;
+
+      overflow: hidden;
+    }
+
+
+    .game:hover {
+      transform:
+        translateY(-6px);
+
+      border-color:
+        #5d8cff;
+
+      box-shadow:
+        0 10px 30px
+        rgba(
+          0,
+          0,
+          0,
+          0.35
+        );
+    }
+
+
+    .game-icon {
+      font-size: 52px;
+
+      margin-bottom: 12px;
+    }
+
 
     .game h2 {
-      margin-top: 0;
+      margin:
+        0 0 7px;
     }
 
+
     .game p {
-      color: #bbb;
+      color: #aaa;
+
+      line-height: 1.4;
+
       min-height: 40px;
     }
 
-    a {
-      display: inline-block;
-      background-color: white;
-      color: black;
-      text-decoration: none;
-      padding: 10px 25px;
-      border-radius: 8px;
-      font-weight: bold;
-      transition: 0.2s;
+
+    .game-bottom {
+      display: flex;
+
+      justify-content:
+        space-between;
+
+      align-items: center;
+
+      gap: 10px;
+
+      margin-top: 18px;
     }
 
-    a:hover {
-      background-color: #ccc;
-      transform: scale(1.05);
+
+    .play {
+      display: inline-block;
+
+      padding:
+        10px 20px;
+
+      border-radius: 8px;
+
+      background: white;
+
+      color: black;
+
+      text-decoration: none;
+
+      font-weight: bold;
     }
+
+
+    .play:hover {
+      background:
+        #00c8ff;
+    }
+
+
+    .favorite {
+      border: none;
+
+      background: #292d36;
+
+      color: white;
+
+      font-size: 20px;
+
+      border-radius: 8px;
+
+      width: 42px;
+
+      height: 42px;
+
+      cursor: pointer;
+    }
+
+
+    .favorite.active {
+      color: #ffdf4d;
+    }
+
+
+    .badge {
+      position: absolute;
+
+      right: 12px;
+
+      top: 12px;
+
+      padding:
+        5px 9px;
+
+      border-radius: 12px;
+
+      font-size: 11px;
+
+      font-weight: bold;
+    }
+
+
+    .new {
+      background:
+        #25c870;
+
+      color: #03140a;
+    }
+
+
+    .popular {
+      background:
+        #ffb52c;
+
+      color: #241600;
+    }
+
+
+    .difficulty {
+      display: inline-block;
+
+      margin-top: 7px;
+
+      color: #7f8998;
+
+      font-size: 13px;
+    }
+
 
     footer {
       margin-top: 60px;
-      padding: 25px;
-      color: #777;
-      font-size: 14px;
-      border-top: 1px solid #222;
+
+      border-top:
+        1px solid #222;
+
+      text-align: center;
+
+      padding: 30px;
+
+      color: #666;
     }
+
+
+    #noResults {
+      color: #888;
+
+      display: none;
+
+      margin-top: 30px;
+    }
+
+
+    @media (
+      max-width: 650px
+    ) {
+
+      header {
+        justify-content:
+          center;
+
+        text-align: center;
+      }
+
+
+      .logo-area {
+        flex-direction:
+          column;
+      }
+
+
+      .featured {
+        text-align: center;
+
+        justify-content:
+          center;
+      }
+
+
+      .featured h2 {
+        font-size: 32px;
+      }
+
+
+      .featured-icon {
+        font-size: 80px;
+      }
+
+
+      .section-title {
+        text-align: center;
+      }
+
+    }
+
   </style>
+
 </head>
+
 
 <body>
 
-  <h1>🎮 Enzo's Game Hub</h1>
 
-  <p class="subtitle">Pick a game</p>
+<header>
 
-  <div class="games">
+  <div class="logo-area">
 
-    <div class="game">
-      <h2>🏓 Pong</h2>
-      <p>2 player ping pong</p>
-      <a href="pong/">Play</a>
-    </div>
+    <img
+      src="favicon.png"
+      alt="EGH Logo"
+    >
 
-    <div class="game">
-      <h2>🐍 Snake</h2>
-      <p>Classic snake game</p>
-      <a href="snake/">Play</a>
-    </div>
+    <div class="logo-text">
 
-    <div class="game">
-      <h2>❌ Tic Tac Toe</h2>
-      <p>2 player tic tac toe</p>
-      <a href="tic-tac-toe/">Play</a>
-    </div>
+      <h1>
+        Enzo's Game Hub
+      </h1>
 
-    <div class="game">
-      <h2>☄️ Meteor Mayhem</h2>
-      <p>Dodge meteors and survive!</p>
-      <a href="meteor-mayhem/">Play</a>
-    </div>
+      <p>
+        Play. Compete. Survive.
+      </p>
 
-    <div class="game">
-      <h2>🧟 Zombie Survival</h2>
-      <p>Fight zombies, survive waves, and upgrade.</p>
-      <a href="zombie-survival/">Play</a>
     </div>
 
   </div>
 
-  <footer>
-    Enzo's Game Hub • Version 1.0
-  </footer>
+
+  <nav>
+
+    <button
+      onclick="showAllGames()"
+    >
+      🎮 Games
+    </button>
+
+    <button
+      onclick="showFavorites()"
+    >
+      ⭐ Favorites
+    </button>
+
+  </nav>
+
+</header>
+
+
+<main>
+
+
+  <section class="featured">
+
+    <div class="featured-text">
+
+      <div class="featured-tag">
+        FEATURED GAME
+      </div>
+
+      <h2>
+        🧟 Zombie Survival
+      </h2>
+
+      <p>
+        Fight through endless waves,
+        unlock powerful weapons,
+        level up your character,
+        defeat bosses,
+        and try to survive the outbreak.
+      </p>
+
+      <a href="zombie-survival/">
+        Play Now
+      </a>
+
+    </div>
+
+
+    <div class="featured-icon">
+      🧟‍♂️
+    </div>
+
+  </section>
+
+
+  <div class="toolbar">
+
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="🔎 Search games..."
+    >
+
+    <button id="randomButton">
+      🎲 Random Game
+    </button>
+
+  </div>
+
+
+  <div class="categories">
+
+    <button
+      class="category active"
+      data-category="all"
+    >
+      All Games
+    </button>
+
+    <button
+      class="category"
+      data-category="arcade"
+    >
+      Arcade
+    </button>
+
+    <button
+      class="category"
+      data-category="survival"
+    >
+      Survival
+    </button>
+
+    <button
+      class="category"
+      data-category="two-player"
+    >
+      2 Player
+    </button>
+
+    <button
+      class="category"
+      data-category="puzzle"
+    >
+      Puzzle
+    </button>
+
+  </div>
+
+
+  <h2 class="section-title">
+    All Games
+  </h2>
+
+
+  <div
+    class="games"
+    id="games"
+  >
+
+
+    <div
+      class="game"
+      data-name="pong"
+      data-category="arcade two-player"
+    >
+
+      <div class="game-icon">
+        🏓
+      </div>
+
+      <h2>
+        Pong
+      </h2>
+
+      <p>
+        Classic 2-player ping pong.
+        First player to dominate wins.
+      </p>
+
+      <span class="difficulty">
+        Difficulty: Easy
+      </span>
+
+      <div class="game-bottom">
+
+        <a
+          class="play"
+          href="pong/"
+        >
+          Play
+        </a>
+
+        <button
+          class="favorite"
+          data-game="pong"
+        >
+          ☆
+        </button>
+
+      </div>
+
+    </div>
+
+
+
+    <div
+      class="game"
+      data-name="snake"
+      data-category="arcade"
+    >
+
+      <div class="game-icon">
+        🐍
+      </div>
+
+      <h2>
+        Snake
+      </h2>
+
+      <p>
+        Eat food, grow longer,
+        and try not to crash.
+      </p>
+
+      <span class="difficulty">
+        Difficulty: Medium
+      </span>
+
+      <div class="game-bottom">
+
+        <a
+          class="play"
+          href="snake/"
+        >
+          Play
+        </a>
+
+        <button
+          class="favorite"
+          data-game="snake"
+        >
+          ☆
+        </button>
+
+      </div>
+
+    </div>
+
+
+
+    <div
+      class="game"
+      data-name="tic tac toe"
+      data-category="puzzle two-player"
+    >
+
+      <div class="badge popular">
+        POPULAR
+      </div>
+
+      <div class="game-icon">
+        ❌
+      </div>
+
+      <h2>
+        Tic Tac Toe
+      </h2>
+
+      <p>
+        Battle your friend
+        in classic Tic Tac Toe.
+      </p>
+
+      <span class="difficulty">
+        Difficulty: Easy
+      </span>
+
+      <div class="game-bottom">
+
+        <a
+          class="play"
+          href="tic-tac-toe/"
+        >
+          Play
+        </a>
+
+        <button
+          class="favorite"
+          data-game="tic-tac-toe"
+        >
+          ☆
+        </button>
+
+      </div>
+
+    </div>
+
+
+
+    <div
+      class="game"
+      data-name="meteor mayhem"
+      data-category="survival arcade"
+    >
+
+      <div class="badge popular">
+        POPULAR
+      </div>
+
+      <div class="game-icon">
+        ☄️
+      </div>
+
+      <h2>
+        Meteor Mayhem
+      </h2>
+
+      <p>
+        Dodge meteors,
+        collect stars,
+        and survive.
+      </p>
+
+      <span class="difficulty">
+        Difficulty: Hard
+      </span>
+
+      <div class="game-bottom">
+
+        <a
+          class="play"
+          href="meteor-mayhem/"
+        >
+          Play
+        </a>
+
+        <button
+          class="favorite"
+          data-game="meteor-mayhem"
+        >
+          ☆
+        </button>
+
+      </div>
+
+    </div>
+
+
+
+    <div
+      class="game"
+      data-name="zombie survival"
+      data-category="survival arcade two-player"
+    >
+
+      <div class="badge new">
+        NEW
+      </div>
+
+      <div class="game-icon">
+        🧟
+      </div>
+
+      <h2>
+        Zombie Survival
+      </h2>
+
+      <p>
+        Fight zombies,
+        unlock weapons,
+        upgrade,
+        and defeat bosses.
+      </p>
+
+      <span class="difficulty">
+        Difficulty: Hard
+      </span>
+
+      <div class="game-bottom">
+
+        <a
+          class="play"
+          href="zombie-survival/"
+        >
+          Play
+        </a>
+
+        <button
+          class="favorite"
+          data-game="zombie-survival"
+        >
+          ☆
+        </button>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+  <p id="noResults">
+    No games found 😭
+  </p>
+
+
+</main>
+
+
+<footer>
+
+  Enzo's Game Hub
+  • Version 2.0
+
+  <br><br>
+
+  More games coming soon.
+
+</footer>
+
+
+<script>
+
+  const games =
+    document.querySelectorAll(
+      ".game"
+    );
+
+
+  const searchInput =
+    document.getElementById(
+      "searchInput"
+    );
+
+
+  const categories =
+    document.querySelectorAll(
+      ".category"
+    );
+
+
+  const favoriteButtons =
+    document.querySelectorAll(
+      ".favorite"
+    );
+
+
+  const noResults =
+    document.getElementById(
+      "noResults"
+    );
+
+
+  let currentCategory =
+    "all";
+
+
+  let favoriteMode =
+    false;
+
+
+  let favorites =
+    JSON.parse(
+      localStorage.getItem(
+        "eghFavorites"
+      )
+    ) || [];
+
+
+  function saveFavorites() {
+
+    localStorage.setItem(
+      "eghFavorites",
+      JSON.stringify(
+        favorites
+      )
+    );
+
+  }
+
+
+  function updateFavoriteButtons() {
+
+    favoriteButtons.forEach(
+      function(button) {
+
+        const game =
+          button.dataset.game;
+
+
+        if (
+          favorites.includes(
+            game
+          )
+        ) {
+
+          button.textContent =
+            "★";
+
+          button.classList.add(
+            "active"
+          );
+
+        } else {
+
+          button.textContent =
+            "☆";
+
+          button.classList.remove(
+            "active"
+          );
+
+        }
+
+      }
+    );
+
+  }
+
+
+  favoriteButtons.forEach(
+    function(button) {
+
+      button.addEventListener(
+        "click",
+        function() {
+
+          const game =
+            button.dataset.game;
+
+
+          if (
+            favorites.includes(
+              game
+            )
+          ) {
+
+            favorites =
+              favorites.filter(
+                function(item) {
+
+                  return item !== game;
+
+                }
+              );
+
+          } else {
+
+            favorites.push(
+              game
+            );
+
+          }
+
+
+          saveFavorites();
+
+          updateFavoriteButtons();
+
+
+          if (
+            favoriteMode
+          ) {
+
+            filterGames();
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+
+  function filterGames() {
+
+    const search =
+      searchInput.value
+        .toLowerCase()
+        .trim();
+
+
+    let visibleGames =
+      0;
+
+
+    games.forEach(
+      function(game) {
+
+        const name =
+          game.dataset.name;
+
+        const categories =
+          game.dataset.category;
+
+        const favoriteName =
+          game
+            .querySelector(
+              ".favorite"
+            )
+            .dataset.game;
+
+
+        const matchesSearch =
+          name.includes(
+            search
+          );
+
+
+        const matchesCategory =
+          currentCategory === "all" ||
+          categories.includes(
+            currentCategory
+          );
+
+
+        const matchesFavorite =
+          !favoriteMode ||
+          favorites.includes(
+            favoriteName
+          );
+
+
+        if (
+          matchesSearch &&
+          matchesCategory &&
+          matchesFavorite
+        ) {
+
+          game.style.display =
+            "block";
+
+          visibleGames++;
+
+        } else {
+
+          game.style.display =
+            "none";
+
+        }
+
+      }
+    );
+
+
+    if (
+      visibleGames === 0
+    ) {
+
+      noResults.style.display =
+        "block";
+
+    } else {
+
+      noResults.style.display =
+        "none";
+
+    }
+
+  }
+
+
+  searchInput.addEventListener(
+    "input",
+    filterGames
+  );
+
+
+  categories.forEach(
+    function(button) {
+
+      button.addEventListener(
+        "click",
+        function() {
+
+          favoriteMode =
+            false;
+
+
+          categories.forEach(
+            function(category) {
+
+              category.classList.remove(
+                "active"
+              );
+
+            }
+          );
+
+
+          button.classList.add(
+            "active"
+          );
+
+
+          currentCategory =
+            button.dataset.category;
+
+
+          filterGames();
+
+        }
+      );
+
+    }
+  );
+
+
+  function showFavorites() {
+
+    favoriteMode =
+      true;
+
+    currentCategory =
+      "all";
+
+
+    categories.forEach(
+      function(category) {
+
+        category.classList.remove(
+          "active"
+        );
+
+      }
+    );
+
+
+    filterGames();
+
+  }
+
+
+  function showAllGames() {
+
+    favoriteMode =
+      false;
+
+    currentCategory =
+      "all";
+
+
+    categories.forEach(
+      function(category) {
+
+        if (
+          category.dataset.category
+          === "all"
+        ) {
+
+          category.classList.add(
+            "active"
+          );
+
+        } else {
+
+          category.classList.remove(
+            "active"
+          );
+
+        }
+
+      }
+    );
+
+
+    searchInput.value =
+      "";
+
+
+    filterGames();
+
+  }
+
+
+  document
+    .getElementById(
+      "randomButton"
+    )
+    .addEventListener(
+      "click",
+      function() {
+
+        const links = [
+
+          "pong/",
+
+          "snake/",
+
+          "tic-tac-toe/",
+
+          "meteor-mayhem/",
+
+          "zombie-survival/"
+
+        ];
+
+
+        const randomGame =
+          links[
+            Math.floor(
+              Math.random()
+              *
+              links.length
+            )
+          ];
+
+
+        window.location.href =
+          randomGame;
+
+      }
+    );
+
+
+  updateFavoriteButtons();
+
+  filterGames();
+
+</script>
+
 
 </body>
 </html>
