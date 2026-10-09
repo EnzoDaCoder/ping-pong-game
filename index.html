@@ -3,72 +3,39 @@
 
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Enzo's Game Hub</title>
 
-  <link
-    rel="icon"
-    type="image/png"
-    href="favicon.png"
-  >
+  <link rel="icon" type="image/png" href="favicon.png">
 
   <style>
-
     * {
       box-sizing: border-box;
     }
 
     body {
       margin: 0;
-      background:
-        radial-gradient(
-          circle at top,
-          #10243a,
-          #07090f 55%
-        );
-
-      color: white;
-
-      font-family:
-        Arial,
-        sans-serif;
-
       min-height: 100vh;
+      background:
+        radial-gradient(circle at top, #10243a, #07090f 55%);
+      color: white;
+      font-family: Arial, sans-serif;
     }
-
 
     header {
       display: flex;
-
-      justify-content:
-        space-between;
-
+      justify-content: space-between;
       align-items: center;
-
       flex-wrap: wrap;
-
       gap: 20px;
 
-      padding:
-        20px 5%;
+      padding: 20px 5%;
 
-      border-bottom:
-        1px solid #222;
+      border-bottom: 1px solid #222;
 
-      background:
-        rgba(
-          0,
-          0,
-          0,
-          0.35
-        );
+      background: rgba(0, 0, 0, 0.35);
     }
-
 
     .logo-area {
       display: flex;
@@ -76,40 +43,27 @@
       gap: 15px;
     }
 
-
     .logo-area img {
       width: 65px;
       height: 65px;
 
       border-radius: 15px;
-
       object-fit: cover;
 
       box-shadow:
         0 0 20px
-        rgba(
-          0,
-          200,
-          255,
-          0.35
-        );
+        rgba(0, 200, 255, 0.35);
     }
-
 
     .logo-text h1 {
       margin: 0;
-
       font-size: 30px;
     }
 
-
     .logo-text p {
-      margin:
-        4px 0 0;
-
+      margin: 4px 0 0;
       color: #888;
     }
-
 
     nav {
       display: flex;
@@ -117,44 +71,29 @@
       flex-wrap: wrap;
     }
 
-
     nav button {
       background: #171b22;
-
       color: white;
 
-      border:
-        1px solid #333;
-
+      border: 1px solid #333;
       border-radius: 8px;
 
-      padding:
-        10px 14px;
+      padding: 10px 14px;
 
       cursor: pointer;
     }
 
-
     nav button:hover {
-      border-color:
-        #00ccff;
+      border-color: #00ccff;
     }
 
-
     main {
-      width:
-        min(
-          1200px,
-          94%
-        );
-
+      width: min(1200px, 94%);
       margin: auto;
     }
 
-
     .featured {
       margin-top: 35px;
-
       padding: 35px;
 
       border-radius: 20px;
@@ -166,79 +105,54 @@
           #172b1d
         );
 
-      border:
-        1px solid #304554;
+      border: 1px solid #304554;
 
       display: flex;
-
-      justify-content:
-        space-between;
-
+      justify-content: space-between;
       align-items: center;
-
       flex-wrap: wrap;
 
       gap: 30px;
 
       box-shadow:
         0 0 30px
-        rgba(
-          0,
-          200,
-          255,
-          0.1
-        );
+        rgba(0, 200, 255, 0.1);
     }
-
 
     .featured-text {
       max-width: 620px;
     }
 
-
     .featured-tag {
       color: #59d7ff;
 
       font-size: 13px;
-
       font-weight: bold;
-
       letter-spacing: 2px;
     }
 
-
     .featured h2 {
       font-size: 42px;
-
-      margin:
-        10px 0;
+      margin: 10px 0;
     }
-
 
     .featured p {
       color: #bbb;
-
       font-size: 17px;
-
       line-height: 1.5;
     }
-
 
     .featured a {
       display: inline-block;
 
       margin-top: 12px;
 
-      padding:
-        13px 25px;
+      padding: 13px 25px;
 
-      background:
-        #00c8ff;
-
+      background: #00c8ff;
       color: #001118;
 
       font-weight: bold;
-
       text-decoration: none;
 
       border-radius: 10px;
@@ -246,40 +160,28 @@
       transition: 0.2s;
     }
 
-
     .featured a:hover {
-      transform:
-        translateY(-3px);
+      transform: translateY(-3px);
 
       box-shadow:
         0 0 20px
-        rgba(
-          0,
-          200,
-          255,
-          0.5
-        );
+        rgba(0, 200, 255, 0.5);
     }
-
 
     .featured-icon {
       font-size: 110px;
     }
 
-
     .toolbar {
       margin-top: 35px;
 
       display: flex;
-
-      justify-content:
-        space-between;
+      justify-content: space-between;
 
       gap: 15px;
 
       flex-wrap: wrap;
     }
-
 
     #searchInput {
       flex: 1;
@@ -289,12 +191,9 @@
       padding: 13px 16px;
 
       background: #151820;
-
       color: white;
 
-      border:
-        1px solid #333;
-
+      border: 1px solid #333;
       border-radius: 10px;
 
       font-size: 16px;
@@ -302,23 +201,17 @@
       outline: none;
     }
 
-
     #searchInput:focus {
-      border-color:
-        #00c8ff;
+      border-color: #00c8ff;
     }
 
-
     #randomButton {
-      padding:
-        12px 20px;
+      padding: 12px 20px;
 
       border: none;
-
       border-radius: 10px;
 
       background: #6b55ff;
-
       color: white;
 
       font-weight: bold;
@@ -326,12 +219,9 @@
       cursor: pointer;
     }
 
-
     #randomButton:hover {
-      transform:
-        translateY(-2px);
+      transform: translateY(-2px);
     }
-
 
     .categories {
       display: flex;
@@ -343,39 +233,30 @@
       margin-top: 20px;
     }
 
-
     .category {
-      padding:
-        9px 15px;
+      padding: 9px 15px;
 
       background: #171a21;
-
-      border:
-        1px solid #333;
-
-      border-radius: 20px;
-
       color: white;
+
+      border: 1px solid #333;
+      border-radius: 20px;
 
       cursor: pointer;
     }
-
 
     .category.active {
       background: white;
       color: black;
     }
 
-
     .section-title {
-      margin:
-        40px 0 20px;
+      margin: 40px 0 20px;
 
       font-size: 28px;
 
       text-align: left;
     }
-
 
     .games {
       display: grid;
@@ -383,15 +264,11 @@
       grid-template-columns:
         repeat(
           auto-fit,
-          minmax(
-            230px,
-            1fr
-          )
+          minmax(230px, 1fr)
         );
 
       gap: 22px;
     }
-
 
     .game {
       position: relative;
@@ -403,8 +280,7 @@
           #111318
         );
 
-      border:
-        1px solid #333;
+      border: 1px solid #333;
 
       border-radius: 16px;
 
@@ -417,24 +293,15 @@
       overflow: hidden;
     }
 
-
     .game:hover {
-      transform:
-        translateY(-6px);
+      transform: translateY(-6px);
 
-      border-color:
-        #5d8cff;
+      border-color: #5d8cff;
 
       box-shadow:
         0 10px 30px
-        rgba(
-          0,
-          0,
-          0,
-          0.35
-        );
+        rgba(0, 0, 0, 0.35);
     }
-
 
     .game-icon {
       font-size: 52px;
@@ -442,12 +309,9 @@
       margin-bottom: 12px;
     }
 
-
     .game h2 {
-      margin:
-        0 0 7px;
+      margin: 0 0 7px;
     }
-
 
     .game p {
       color: #aaa;
@@ -456,103 +320,6 @@
 
       min-height: 40px;
     }
-
-
-    .game-bottom {
-      display: flex;
-
-      justify-content:
-        space-between;
-
-      align-items: center;
-
-      gap: 10px;
-
-      margin-top: 18px;
-    }
-
-
-    .play {
-      display: inline-block;
-
-      padding:
-        10px 20px;
-
-      border-radius: 8px;
-
-      background: white;
-
-      color: black;
-
-      text-decoration: none;
-
-      font-weight: bold;
-    }
-
-
-    .play:hover {
-      background:
-        #00c8ff;
-    }
-
-
-    .favorite {
-      border: none;
-
-      background: #292d36;
-
-      color: white;
-
-      font-size: 20px;
-
-      border-radius: 8px;
-
-      width: 42px;
-
-      height: 42px;
-
-      cursor: pointer;
-    }
-
-
-    .favorite.active {
-      color: #ffdf4d;
-    }
-
-
-    .badge {
-      position: absolute;
-
-      right: 12px;
-
-      top: 12px;
-
-      padding:
-        5px 9px;
-
-      border-radius: 12px;
-
-      font-size: 11px;
-
-      font-weight: bold;
-    }
-
-
-    .new {
-      background:
-        #25c870;
-
-      color: #03140a;
-    }
-
-
-    .popular {
-      background:
-        #ffb52c;
-
-      color: #241600;
-    }
-
 
     .difficulty {
       display: inline-block;
@@ -564,12 +331,91 @@
       font-size: 13px;
     }
 
+    .game-bottom {
+      display: flex;
+
+      justify-content: space-between;
+      align-items: center;
+
+      gap: 10px;
+
+      margin-top: 18px;
+    }
+
+    .play {
+      display: inline-block;
+
+      padding: 10px 20px;
+
+      border-radius: 8px;
+
+      background: white;
+      color: black;
+
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .play:hover {
+      background: #00c8ff;
+    }
+
+    .favorite {
+      border: none;
+
+      background: #292d36;
+      color: white;
+
+      font-size: 20px;
+
+      border-radius: 8px;
+
+      width: 42px;
+      height: 42px;
+
+      cursor: pointer;
+    }
+
+    .favorite.active {
+      color: #ffdf4d;
+    }
+
+    .badge {
+      position: absolute;
+
+      right: 12px;
+      top: 12px;
+
+      padding: 5px 9px;
+
+      border-radius: 12px;
+
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .new {
+      background: #25c870;
+      color: #03140a;
+    }
+
+    .popular {
+      background: #ffb52c;
+      color: #241600;
+    }
+
+    #noResults {
+      display: none;
+
+      color: #888;
+
+      margin-top: 30px;
+    }
 
     footer {
       margin-top: 60px;
 
-      border-top:
-        1px solid #222;
+      border-top: 1px solid #222;
 
       text-align: center;
 
@@ -578,65 +424,41 @@
       color: #666;
     }
 
-
-    #noResults {
-      color: #888;
-
-      display: none;
-
-      margin-top: 30px;
-    }
-
-
-    @media (
-      max-width: 650px
-    ) {
+    @media(max-width: 650px) {
 
       header {
-        justify-content:
-          center;
-
+        justify-content: center;
         text-align: center;
       }
 
-
       .logo-area {
-        flex-direction:
-          column;
+        flex-direction: column;
       }
-
 
       .featured {
         text-align: center;
-
-        justify-content:
-          center;
+        justify-content: center;
       }
-
 
       .featured h2 {
         font-size: 32px;
       }
 
-
       .featured-icon {
         font-size: 80px;
       }
-
 
       .section-title {
         text-align: center;
       }
 
     }
-
   </style>
 
 </head>
 
 
 <body>
-
 
 <header>
 
@@ -664,15 +486,11 @@
 
   <nav>
 
-    <button
-      onclick="showAllGames()"
-    >
+    <button onclick="showAllGames()">
       🎮 Games
     </button>
 
-    <button
-      onclick="showFavorites()"
-    >
+    <button onclick="showFavorites()">
       ⭐ Favorites
     </button>
 
@@ -784,6 +602,8 @@
   >
 
 
+    <!-- PONG -->
+
     <div
       class="game"
       data-name="pong"
@@ -829,6 +649,8 @@
 
 
 
+    <!-- SNAKE -->
+
     <div
       class="game"
       data-name="snake"
@@ -873,6 +695,8 @@
     </div>
 
 
+
+    <!-- TIC TAC TOE -->
 
     <div
       class="game"
@@ -922,6 +746,8 @@
     </div>
 
 
+
+    <!-- METEOR MAYHEM -->
 
     <div
       class="game"
@@ -973,14 +799,16 @@
 
 
 
+    <!-- ZOMBIE SURVIVAL -->
+
     <div
       class="game"
       data-name="zombie survival"
       data-category="survival arcade two-player"
     >
 
-      <div class="badge new">
-        NEW
+      <div class="badge popular">
+        POPULAR
       </div>
 
       <div class="game-icon">
@@ -1014,6 +842,58 @@
         <button
           class="favorite"
           data-game="zombie-survival"
+        >
+          ☆
+        </button>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- 8 BALL POOL -->
+
+    <div
+      class="game"
+      data-name="8 ball pool"
+      data-category="two-player"
+    >
+
+      <div class="badge new">
+        NEW
+      </div>
+
+      <div class="game-icon">
+        🎱
+      </div>
+
+      <h2>
+        8-Ball Pool
+      </h2>
+
+      <p>
+        Clear your group,
+        then sink the 8-ball
+        to win.
+      </p>
+
+      <span class="difficulty">
+        Difficulty: Medium
+      </span>
+
+      <div class="game-bottom">
+
+        <a
+          class="play"
+          href="pool/"
+        >
+          Play
+        </a>
+
+        <button
+          class="favorite"
+          data-game="pool"
         >
           ☆
         </button>
@@ -1208,8 +1088,7 @@
         .trim();
 
 
-    let visibleGames =
-      0;
+    let visibleGames = 0;
 
 
     games.forEach(
@@ -1218,8 +1097,10 @@
         const name =
           game.dataset.name;
 
-        const categories =
+
+        const gameCategories =
           game.dataset.category;
+
 
         const favoriteName =
           game
@@ -1237,7 +1118,7 @@
 
         const matchesCategory =
           currentCategory === "all" ||
-          categories.includes(
+          gameCategories.includes(
             currentCategory
           );
 
@@ -1339,6 +1220,7 @@
     favoriteMode =
       true;
 
+
     currentCategory =
       "all";
 
@@ -1364,6 +1246,7 @@
     favoriteMode =
       false;
 
+
     currentCategory =
       "all";
 
@@ -1372,8 +1255,8 @@
       function(category) {
 
         if (
-          category.dataset.category
-          === "all"
+          category.dataset.category ===
+          "all"
         ) {
 
           category.classList.add(
@@ -1419,7 +1302,9 @@
 
           "meteor-mayhem/",
 
-          "zombie-survival/"
+          "zombie-survival/",
+
+          "pool/"
 
         ];
 
@@ -1427,8 +1312,7 @@
         const randomGame =
           links[
             Math.floor(
-              Math.random()
-              *
+              Math.random() *
               links.length
             )
           ];
@@ -1449,4 +1333,5 @@
 
 
 </body>
+
 </html>
